@@ -1,0 +1,13 @@
+{
+  "name": "marketplace-audit",
+  "owner": {
+    "name": "JinY0ung-Shin"
+  },
+  "plugins": [
+    {
+      "name": "marketplace-audit",
+      "source": "./plugins/marketplace-audit",
+      "description": "Audit agent, skill, and MCP boundaries, routing, dependencies, and marketplace architecture."
+    }
+  ]
+}
