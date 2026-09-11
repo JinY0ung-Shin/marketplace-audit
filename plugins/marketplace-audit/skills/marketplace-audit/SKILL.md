@@ -33,15 +33,14 @@ description: Claude 스타일 marketplace와 plugin의 구조, agent·skill·MCP
 - JSON/YAML 구문, 필수 metadata, 중복 식별자, 경로 존재, manifest와 구성요소 배치, 참조 파일을 검사한다.
 - Claude CLI가 있으면 버전과 지원 여부를 확인한 뒤 `claude plugin validate <marketplace>`와 필요한 개별 plugin 경로 검사를 수행한다. 루트 검사만으로 내부 구성요소가 모두 검증된다고 가정하지 않는다.
 - CLI가 없으면 설치하지 말고 수동 검사 범위와 미실행 항목을 기록한다. CLI 종료 코드·경고·실제 검사 범위를 남긴다.
-- 버전별 기능, tool 이름 해석, scope 우선순위, skill 상속·로드 동작은 설치 버전의 공식 문서나 구현을 확인한다. 확인할 수 없으면 호환성 판단을 보류한다.
+- 버전별 기능, tool 이름 해석, scope 우선순위, skill 상속·로드 동작은 설치 버전의 로컬 문서·schema·help 또는 구현을 확인한다. 확인할 수 없으면 호환성 판단을 보류한다.
 - 같은 이름도 namespace/scope가 달라 해석이 명확하면 충돌로 단정하지 않는다. 순환 참조도 실제 재귀 호출 가능성과 중단 조건을 확인한다.
 
-공식 확인 출발점:
-- https://code.claude.com/docs/en/plugin-marketplaces
-- https://code.claude.com/docs/en/plugins
-- https://code.claude.com/docs/en/skills
-- https://code.claude.com/docs/en/sub-agents
-- https://modelcontextprotocol.io/docs/learn/server-concepts
+오프라인 문서 참조:
+- 구조·호환성 검토 전에 [references/offline-reference-index.md](references/offline-reference-index.md)를 읽고 필요한 로컬 문서를 선택한다.
+- 기본 감사 중에는 웹 검색, 원문 URL 접속, 패키지 설치 등 외부 문서 확보를 시도하지 않는다. 출처 URL은 provenance이며 실행 의존성이 아니다.
+- 설치 버전의 로컬 schema·help·문서·구현을 우선한다. 번들 문서는 2026-09-11 기준의 요약이며 전체 원문 또는 모든 버전의 schema를 대체하지 않는다.
+- 버전별 사실을 로컬 증거로 확인할 수 없으면 해당 항목만 미확인으로 남기고 나머지 감사를 계속한다. 인터넷 연결을 요구하지 않는다.
 
 ## 4. 책임 경계와 전체 설계 평가
 

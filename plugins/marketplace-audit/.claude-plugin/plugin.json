@@ -1,6 +1,6 @@
 {
   "name": "marketplace-audit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Evidence-based audits of Claude-style marketplaces, plugins, agent/skill/MCP boundaries, and execution quality.",
   "author": {
     "name": "JinY0ung-Shin"

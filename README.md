@@ -90,3 +90,16 @@ Plugin을 변경해 배포할 때 `plugins/marketplace-audit/.claude-plugin/plug
 - [Claude Code skills](https://code.claude.com/docs/en/skills)
 - [Claude Code subagents](https://code.claude.com/docs/en/sub-agents)
 - [MCP server concepts](https://modelcontextprotocol.io/docs/learn/server-concepts)
+
+## 제한된 네트워크 환경
+
+`SKILL.md`는 외부 사이트 대신 번들된 [오프라인 reference pack](plugins/marketplace-audit/skills/marketplace-audit/references/offline-reference-index.md)을 참조합니다. 기존 공식 문서 5개의 감사 관련 내용을 영어 요약으로 포함했습니다. 전체 원문 미러는 아니며 기준일은 2026-09-11입니다. 출처 URL은 기록용입니다. 기본 감사 중 외부 문서 접속이나 자동 다운로드를 시도하지 않습니다.
+
+저장소 전체를 서버로 옮긴 뒤 로컬 경로로 등록할 수 있습니다.
+
+```text
+/plugin marketplace add /absolute/path/to/marketplace-audit
+/plugin install marketplace-audit@marketplace-audit
+```
+
+설치한 모델·호스트와 감사 대상 MCP 자체의 네트워크 요구사항은 별개입니다. 로컬 버전의 문서나 schema가 번들 요약과 다르면 로컬 증거를 우선하며, 확인할 수 없는 부분만 미확인으로 보고합니다.
