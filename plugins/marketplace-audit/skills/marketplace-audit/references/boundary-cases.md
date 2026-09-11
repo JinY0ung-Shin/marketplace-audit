@@ -1,33 +1,33 @@
-# 경계 판정과 반례
+# Boundary judgments and counterexamples
 
-## 판정 절차
+## Decision procedure
 
-1. 누가 결과를 책임지고 누가 방법론·계약을 소유하는지 찾는다.
-2. 동일 규칙이 독립적으로 수정될 위치가 둘 이상인지 확인한다.
-3. 절차 변경·API 변경·담당 역할 변경을 각각 가정하여 수정 범위와 불일치 가능성을 설명한다.
-4. 권한·컨텍스트 격리, 트랜잭션, 성능, 재사용 등 현재 배치의 이유를 찾는다.
-5. 현재 설계보다 제안이 나은 구체적 이유가 있을 때만 결함 또는 개선안을 제시한다.
+1. Identify result ownership and ownership of methods and service contracts.
+2. Check whether the same rule can be independently changed in multiple locations.
+3. Consider changes to procedures, APIs, and assigned responsibilities separately. Explain the resulting edit scope and potential inconsistency.
+4. Look for reasons supporting the current placement: permission/context isolation, transactions, performance, or reuse.
+5. Report a defect or recommendation only when concrete evidence supports it over the current design.
 
-## 중요한 반례
+## Important counterexamples
 
-| 관찰 | 자동으로 결함이 아닌 이유 | 문제가 되는 추가 증거 |
+| Observation | Why it is not automatically a defect | Additional evidence indicating a problem |
 | --- | --- | --- |
-| Agent에 절차가 있음 | 단일 역할에만 필요한 짧은 절차는 적절함 | 동일 절차가 여러 곳에서 별도로 변경되거나 실제 상충함 |
-| Skill이 여러 단계를 실행함 | Skill은 워크플로와 스크립트를 포함할 수 있음 | 독립 권한·상태 격리가 필요한 작업을 같은 컨텍스트에서 수행함 |
-| Skill이 fork 실행됨 | 실행 위치와 지식 소유권은 다른 축임 | 불필요한 격리로 입력 누락·결과 손실이 관찰됨 |
-| MCP tool이 여러 API를 묶음 | 원자성·일관성·latency·도메인 서비스 계약에 유리함 | 상위 agent와 불명확한 책임으로 중복 판단·재시도 부작용이 생김 |
-| MCP 내부에서 LLM을 사용함 | 명확한 계약의 agent-as-tool 서비스도 가능함 | 내부 판단 범위·오류·완료 조건이 불투명하거나 상위 판단과 충돌함 |
-| MCP에 prompt가 있음 | 표준이 prompts와 resources도 지원함 | Skill과 동일한 업무 규칙의 독립 원본을 가짐 |
-| Skill에 로컬 계산 코드가 있음 | 재사용 수요가 없다면 MCP 서비스화가 불필요함 | 계산을 매 요청 자연어로 재구현해 일관성 문제를 일으킴 |
-| 여러 plugin이 동일 MCP를 사용함 | 공통 서버 공유는 정상임 | 같은 세션에 중복 서버를 띄우거나 서로 다른 계약·버전을 가정함 |
-| 같은 명칭을 사용함 | Namespace/scope로 해석할 수 있음 | 실제 host의 이름 해석에서 오선택·가림 현상이 생김 |
-| 의존 그래프에 cycle이 있음 | 문서 참조나 유한한 검토 반복일 수 있음 | 실행 cycle이 발생하고 종료·호출 예산이 없음 |
-| JSON 필드가 문서 예와 다름 | runtime 버전·확장 차이일 수 있음 | 설치 버전 schema나 실행에서 거부됨 |
+| An agent contains a procedure | A short procedure unique to one role can be appropriate | Independent copies drift or conflict |
+| A skill performs multiple steps | Skills can include workflows and scripts | Work requiring isolated permissions/state shares a context |
+| A skill runs in a fork | Execution placement and knowledge ownership are separate axes | Unnecessary isolation causes missing inputs or lost results |
+| An MCP tool combines APIs | Atomicity, consistency, latency, and domain contracts may justify aggregation | Overlapping judgment or unclear ownership causes conflicts or retry side effects |
+| An MCP service uses an LLM | An agent-as-tool service may have an explicit contract | Hidden judgment scope, errors, or completion conditions conflict with the caller |
+| An MCP server provides prompts | Prompts and resources are supported protocol concepts | The same business rule has independent copies in prompts and skills |
+| A skill includes local calculation code | Service deployment may be unnecessary without broader reuse | Calculations are regenerated from prose on each request and become inconsistent |
+| Multiple plugins use one MCP server | Sharing a common service is normal | Duplicate server processes or incompatible contracts/versions are assumed |
+| Components share a name | Namespace/scope may resolve them | Actual host resolution causes shadowing or misrouting |
+| The dependency graph has a cycle | It may represent documentation links or bounded review iterations | An executable cycle lacks stopping or call-budget conditions |
+| JSON differs from a documentation example | Runtime versions or extensions may differ | The installed schema or runtime rejects it |
 
-## 사례
+## Examples
 
-- 비교군 선정 규칙이 agent와 skill에 각각 존재하고 서로 다른 최소 표본 수를 요구한다면, 규칙 소유권 충돌을 확인된 결함으로 보고 양쪽 위치를 제시한다. 어느 값이 올바른지는 업무 근거 없이 고르지 않는다.
-- `get_investigation_bundle(lot_id)`가 관련 이력을 묶어 반환하는 것은 정상적인 서비스 계약일 수 있다. CRUD로 쪼개라는 권고를 자동으로 내리지 않는다.
-- Agent 설명이 모두 “데이터 분석에 사용”이면 라우팅 위험이다. 실제 오선택은 trace 없이 단정하지 않는다. 차별화할 입력·완료 산출물과 경계 요청을 제안한다.
-- Skill의 “쓰기 전에 승인” 문구는 workflow 지침이다. 서버가 실제로 권한 없는 쓰기를 허용하는지는 별도 증거가 필요하다. 자연어 지침만으로 서버 보안이 입증되었다고도 하지 않는다.
-- MCP 설정만 제공된 경우 endpoint와 환경변수 참조는 확인할 수 있으나 서버측 인증·schema·재시도 보장은 미확인이다.
+- If agent and skill instructions specify different minimum sample sizes for the same comparison group, report a confirmed rule-ownership conflict with both locations. Do not choose the correct value without business evidence.
+- `get_investigation_bundle(lot_id)` can be a valid contract that aggregates history. Do not automatically recommend splitting it into CRUD operations.
+- Descriptions that all say “use for data analysis” create routing risk. Without traces, do not claim observed misrouting. Suggest distinguishing inputs, deliverables, and boundary requests.
+- A skill instruction to obtain approval before writing is a workflow rule. Whether a server permits unauthorized writes requires separate evidence. Prose alone also does not demonstrate server security.
+- MCP configuration alone can establish endpoint and environment-variable references, but server-side authentication, schemas, and retry guarantees remain unverified.
